@@ -1,0 +1,109 @@
+---
+- name: Using Jinja2
+  hosts: localhost
+  connection: local
+  become: yes
+  vars: 
+    - my_server: "{{server_name}}"
+  tasks:
+  
+  - name: print variables
+    debug:
+      msg: "server name: {{ my_server }}"
+
+  - package:
+      name: docker
+      state: present
+
+  - service:
+      name: docker
+      state: restarted
+
+  - name: "Downloading and Installing Python-3"
+    package:
+      name: python3
+      state: present
+  
+  - name: Install pip
+    package:
+      name: python-pip
+      update_cache: yes
+      state: present
+    
+  - name: "Downloading and Installing Docker"
+    package:
+      name: docker
+      state: present
+
+  - name: "Starting Docker Service"
+    service:
+       name: "docker"
+       state: started
+       enabled: yes
+
+  - name: Installing Docker Library
+    command: "pip install docker-py"
+    
+ # - command: docker run -it --name ngixserver -d -p 8080:80 -v ~/site-content/html:/usr/share/nginx/html  nginx /bin/bash
+  
+  - name: "install nginx "
+    docker_container:
+      name: ngixserver
+      image: 0132051022/nav-image:myimage
+      exposed_ports: 
+            - "80"
+            - "22"
+      ports:
+        - "80:80"
+        - "2222:22"
+      log_driver: awslogs
+      log_options:
+         awslogs-region: us-east-1
+         awslogs-group: log_to_cloudwatch
+      state: started
+      interactive: yes
+      tty: yes
+    register: result
+
+  - name: Get infos on container
+    docker_container_info:
+      name: ngixserver
+    register: result
+  
+  - command: docker exec -i ngixserver bash -c 'echo "{{ my_server }}" > /usr/share/nginx/html/index.html'
+
+
+  - name: "Does container exist?"
+    debug:
+      var: result.container.NetworkSettings.IPAddress
+    
+
+  - name: "Adding Host"
+    add_host:
+        hostname: "{{ result.container.NetworkSettings.IPAddress }}"
+        groups: docker
+        ansible_user: root
+        ansible_password: myuser
+        ansible_connection: docker
+
+  - name: "Updating Inventory of Ansible with Docker Container IP Address"
+    blockinfile:
+        path: /etc/ansible/hosts
+        block: |
+              [docker]
+              {{  result.container.NetworkSettings.IPAddress  }} ansible_user=root ansible_password=myuser ansible_connection=ssh
+  
+
+- hosts: docker
+  gather_facts: no
+  tasks:
+  - local_action: ping
+
+  - name: "Copying Webpages"
+    template:
+          src: "/home/ec2-user/template.j2"
+          dest: "/usr/share/nginx/html/index.html"
+    register: x
+    notify: Restart Nginx
+    ignore_unreachable: yes
+    ignore_errors: yes
