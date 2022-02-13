@@ -1,3 +1,8 @@
+
+# Project Title
+
+A brief description of what this project does and who it's for
+
 # DevOps Project
 
 ### Project introduction:
@@ -42,7 +47,7 @@ Terraform IAM module which creates role, policy, log group, instance profile to 
 I created the main project and used the above modules.
  
 ### Ansible
-I created ansible file ansible_negix.yml to deploy and configure an Nginx Docker container on each EC2 instance. It will connect to each EC2 instances and perform the following tasks - docker installation, start the docker services, installation of docker library, creates container with Nginx latest image, expose port 80 and map port 8080:80.It also get the container information like ipaddress, connect to docker and replace index.html with jinja2 template and restart the Nginx.   
+I created ansible file ansible_negix.yml to deploy and configure an Nginx Docker container on each EC2 instance. It will connect to each EC2 instances and perform the following tasks - docker installation, start the docker services, installation of docker library, creates container with Nginx latest image.It also get the container information like ipaddress, connect to docker and replace index.html with jinja2 template and restart the Nginx.   
 
 #### Installation/Code execution:
 
