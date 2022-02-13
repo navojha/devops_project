@@ -1,6 +1,6 @@
 module "vpc" {
   source = "../modules/terraform-aws-vpc-module"
-  cidr   = "10.161.0.0/24"
+  cidr   = var.cidr_block
 }
 
 module "iam" {
