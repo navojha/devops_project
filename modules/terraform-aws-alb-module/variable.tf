@@ -1,15 +1,6 @@
 ###############################################################
 ## Application Load Balancer
 ###############################################################
-# variable "region_name" {
-#   type    = string
-#   default = "us-east-1"
-# }
-# variable "alb_count" {
-#   description = "Count of ALB"
-#   type        = number
-#   default     = 2
-# }
 variable "application_load_balancer_name" {
   description = "Name of the APplication Load Balancer"
   type        = string
@@ -20,26 +11,7 @@ variable "internal_or_internet_facing" {
   type        = bool
   default     = false
 }
-# variable "deletion_protection" {
-#   description = "Whether deletion protection is required"
-#   type        = bool
-#   default     = false
-# }
-# variable "bucket_name_for_logs" {
-#   description = "Enter the bucket name to store the logs"
-#   type        = string
-#   default     = ""
-# }
-# variable "prefix_of_logs" {
-#   description = "Mention the prefix name for logs"
-#   type        = string
-#   default     = ""
-# }
-# variable "access_logs_enable" {
-#   description = "Whether access logs is required"
-#   type        = bool
-#   default     = false
-# }
+
 variable "alb_environment_tag" {
   description = "mention the environment name"
   type        = string
