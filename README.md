@@ -5,9 +5,9 @@ I created aws infrastructure using Terraform modules. Deployed and configured an
 
 ### Prerequisites  :
 - An AWS account.
-- AWS user with programmatic access and policies attach with it.
+- AWS user with programmatic access and attach AdministratorAccess policy with it.
 - The AWS CLI installed and configured Access key and Secret key.
-- Create key pair dev-ops.pem and place it into the main project folder.
+- Create key pair dev-ops.pem and place it into the main_project folder.
 
 ### Getting Started:
 
@@ -21,18 +21,21 @@ Terraform VPC/networking module which creates VPC with CIDR rang 10.161.0.0/24 a
       Three public subnet one per availability zone.
       Route table.
       Security group.
-      Cloudwatch log group.
       Internet gatway and associate route table with subnet.
  
 
 
 ### Terraform-aws-ec2-module
 
-Terraform EC2 module which creates three EC2 instances, upload ansible_negix.yml to EC2 and execute ansible playbook on each instance.
+Terraform EC2 module which creates three EC2 instances, upload ansible_negix.yml and template.j2 on EC2 and execute ansible playbook on each instance.
 
 
 ### Terraform-aws-alb-module
 Terraform ALB module which creates application load balancer which is serving port 80 on each instance.
+
+### terraform-aws-iam-module
+Terraform IAM module which creates role, policy, log group, instance profile to access cloudwatch. 
+
 
 ### Main Project
 
@@ -881,14 +884,3 @@ I created ansible file ansible_negix.yml to deploy and configure an Nginx Docker
  - Ansible Document https://docs.ansible.com/ansible/latest/index.html
  - NGINX Document https://www.nginx.com/blog/deploying-nginx-nginx-plus-docker
  - Document reffered for Jinja2 https://www.linuxtechi.com/configure-use-ansible-jinja2-templates/
-
-
-        
-
-
-
-
-            
-            
-
-
